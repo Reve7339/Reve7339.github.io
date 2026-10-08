@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suite de 30 Diseños de Portafolio · Ivan Yerry Hinojosa</title>
+    <style id="baseStyles">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* Fixed Explorer Top Bar */
+        #explorerBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #090A0F;
+            border-bottom: 2px solid #2563EB;
+            color: #fff;
+            z-index: 99999;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.8);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .explorer-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+        .explorer-title span {
+            background: #2563EB;
+            color: #fff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        .family-selector {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .family-btn {
+            background: #141622;
+            border: 1px solid #1E2235;
+            color: #94A3B8;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .family-btn:hover, .family-btn.active {
+            background: #2563EB;
+            color: #fff;
+            border-color: #2563EB;
+        }
+        .variant-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .variant-select {
+            background: #141622;
+            border: 1px solid #2563EB;
+            color: #fff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+        .nav-arrow {
+            background: #141622;
+            border: 1px solid #1E2235;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .nav-arrow:hover { background: #2563EB; }
+        
+        /* Info banner for currently active theme */
+        #themeInfoBanner {
+            background: rgba(13, 14, 20, 0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding: 0.6rem 1.25rem;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 54px;
+            left: 0;
+            right: 0;
+            z-index: 99990;
+            backdrop-filter: blur(10px);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .theme-meta { display: flex; gap: 1.5rem; align-items: center; color: #94A3B8; }
+        .theme-meta strong { color: #fff; }
+        .theme-swatches { display: flex; gap: 0.4rem; align-items: center; }
+        .swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* The Portfolio Viewport Container */
+        #portfolioViewport {
+            margin-top: 96px;
+            min-height: calc(100vh - 96px);
+            transition: background 0.25s, color 0.25s;
+        }
+    </style>
+
+    <!-- Dynamic Theme Stylesheet injected by JS -->
+    <style id="dynamicThemeStyles"></style>
+</head>
+<body>
+
+    <!-- Explorer Toolbar -->
+    <div id="explorerBar">
+        <div class="explorer-title">
+            <span>30 PROPUESTAS</span>
+            Explorador de Diseños de Portafolio
+        </div>
+
+        <div class="family-selector">
+            <button class="family-btn active" onclick="filterFamily('all')">Todas (30)</button>
+            <button class="family-btn" onclick="filterFamily('swiss')">1. Swiss Minimal (1-5)</button>
+            <button class="family-btn" onclick="filterFamily('slate')">2. Deep Slate (6-10)</button>
+            <button class="family-btn" onclick="filterFamily('terminal')">3. Terminal CLI (11-15)</button>
+            <button class="family-btn" onclick="filterFamily('blueprint')">4. Blueprint (16-20)</button>
+            <button class="family-btn" onclick="filterFamily('cyber')">5. Cyber Obsidian (21-25)</button>
+            <button class="family-btn" onclick="filterFamily('craft')">6. Warm Craft (26-30)</button>
+        </div>
+
+        <div class="variant-nav">
+            <button class="nav-arrow" onclick="prevVariant()">◀</button>
+            <select class="variant-select" id="variantSelect" onchange="loadVariant(this.value)">
+                <!-- 30 options populated by JS -->
+            </select>
+            <button class="nav-arrow" onclick="nextVariant()">▶</button>
+        </div>
+    </div>
+
+    <!-- Active Theme Metadata Banner -->
+    <div id="themeInfoBanner">
+        <div class="theme-meta">
+            <div>Variante: <strong id="infoName">01. Zurich Clean White</strong></div>
+            <div>Familia: <strong id="infoFamily">Swiss International</strong></div>
+            <div>Inspiración: <span id="infoInspiration">Dieter Rams, Amie</span></div>
+        </div>
+        <div class="theme-swatches" id="swatchesContainer">
+            <!-- Dynamic swatches -->
+        </div>
+    </div>
+
+    <!-- Portfolio Body Content Rendered with Active Theme -->
+    <div id="portfolioViewport">
+        <div class="port-container">
+            
+            <header class="port-header">
+                <div class="port-brand">
+                    <div class="port-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </div>
+                    <span class="port-wordmark">IVAN YERRY HINOJOSA</span>
+                </div>
+                <div class="port-badge">
+                    <span class="port-dot"></span>
+                    Available for AI Systems Engineering
+                </div>
+                <nav class="port-nav">
+                    <a href="#projects">Proyectos</a>
+                    <a href="#architecture">Arquitectura</a>
+                    <a href="#stack">Stack</a>
+                    <a href="https://github.com/Reve7339" target="_blank">GitHub</a>
+                </nav>
+            </header>
+
+            <section class="port-hero">
+                <div class="port-kicker">INGENIERO DE SOFTWARE & ARQUITECTO DE SISTEMAS IA</div>
+                <h1 class="port-title">Diseñando sistemas distribuidos en Go, agentes autónomos y arquitecturas locales offline-first.</h1>
+                <p class="port-lead">Especializado en rendimiento de alta concurrencia, motores RAG en dispositivo (FTS5 + similitud vectorial de coseno), microservicios en Rust y orquestación multi-LLM determinista.</p>
+                <div class="port-actions">
+                    <a href="https://dex.yerry.me" class="port-btn port-btn-primary" target="_blank">Explorar Proyecto Dex</a>
+                    <a href="https://github.com/Reve7339" class="port-btn port-btn-secondary" target="_blank">Perfil GitHub</a>
+                </div>
+            </section>
+
+            <section id="projects" class="port-section">
+                <div class="port-sec-head">
+                    <h2 class="port-sec-title">Proyecto Insignia</h2>
+                    <span class="port-sec-sub">Producto en Producción & Aplicación Móvil</span>
+                </div>
+
+                <div class="port-card">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="card-tag">AGENTE AUTÓNOMO</span>
+                            <span class="card-version">v1.2.0 Release</span>
+                        </div>
+                        <h3 class="card-title">Dex: Personal Executive Agent</h3>
+                    </div>
+                    <p class="card-desc">Asistente ejecutivo móvil con orquestación distribuida, inferencia NLU en Rust (~100ms), base de datos SQLite v2 física aislada por cuenta y RAG híbrido en el dispositivo sin dependencia obligatoria de internet.</p>
+                    
+                    <div class="arch-pills">
+                        <div class="arch-pill">
+                            <strong>Multi-LLM Fleet</strong>
+                            <span>Groq 120B/20B, Nemotron, Gemini 3.5 con cuotas en Go</span>
+                        </div>
+                        <div class="arch-pill">
+                            <strong>Rust NLU (~100ms)</strong>
+                            <span>Embeddings locales y clasificación en memoria</span>
+                        </div>
+                        <div class="arch-pill">
+                            <strong>RAG Híbrido en Dispositivo</strong>
+                            <span>Búsqueda léxica SQLite FTS5 BM25 + Similitud de Coseno</span>
+                        </div>
+                        <div class="arch-pill">
+                            <strong>Aislamiento Multi-Tenant</strong>
+                            <span>Bases SQLite independientes y pgvector HNSW en Postgres 16</span>
+                        </div>
+                    </div>
+
+                    <div class="card-links">
+                        <a href="https://dex.yerry.me" class="port-btn port-btn-primary" target="_blank">Visitar dex.yerry.me</a>
+                        <a href="https://github.com/Reve7339/klerk-secretary/releases/download/v1.2.0/app-release.apk" class="port-btn port-btn-secondary">Descargar APK v1.2.0</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="stack" class="port-section">
+                <div class="port-sec-head">
+                    <h2 class="port-sec-title">Especialidades Técnicas</h2>
+                </div>
+
+                <div class="stack-grid">
+                    <div class="stack-box">
+                        <h4>High-Concurrency Backend</h4>
+                        <p>Go 1.23, Goroutines, Channels, Context Propagation, Zero Data Races (-race), REST APIs modular monolith.</p>
+                    </div>
+                    <div class="stack-box">
+                        <h4>Local-First Mobile</h4>
+                        <p>Flutter 3, Riverpod State Machines, SQLite v2 relacional, Repository Pattern, resiliencia offline stealth.</p>
+                    </div>
+                    <div class="stack-box">
+                        <h4>AI Systems & Vector Search</h4>
+                        <p>PostgreSQL pgvector, HNSW Indexing, Rust Embeddings, Guardrails deterministas, structured actions.</p>
+                    </div>
+                    <div class="stack-box">
+                        <h4>Edge & Systems Infrastructure</h4>
+                        <p>Caddy 2 Reverse Proxy, TLS 1.3 Let's Encrypt, Docker Compose, Linux Hardening, Oracle Cloud ARM64.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="port-footer">
+                <p>Ivan Yerry Hinojosa · Software Engineer & AI Systems Architect</p>
+                <div class="foot-links">
+                    <a href="https://github.com/Reve7339" target="_blank">GitHub</a>
+                    <a href="https://dex.yerry.me" target="_blank">Dex Project</a>
+                    <a href="mailto:yerri27hinojosa.z@gmail.com">Contacto</a>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        // Definition of the 30 Distinct Design Variants
+        const VARIANTS = [
+            // FAMILY 1: SWISS INTERNATIONAL & MINIMAL EDITORIAL (1-5)
+            {
+                id: 1, family: "swiss", familyName: "Swiss International",
+                name: "01. Zurich Clean White", inspiration: "Dieter Rams, Amie",
+                colors: ["#FAFAFA", "#FFFFFF", "#1E293B", "#2563EB", "#E2E8F0"],
+                bg: "#FAFAFA", text: "#1E293B", muted: "#64748B", surface: "#FFFFFF", border: "#E2E8F0",
+                accent: "#2563EB", accentHover: "#1D4ED8", dot: "#10B981", radius: "8px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 2, family: "swiss", familyName: "Swiss International",
+                name: "02. Geneva Dark Monochrome", inspiration: "Cron, Linear Editorial",
+                colors: ["#0F1015", "#161822", "#FFFFFF", "#60A5FA", "#232638"],
+                bg: "#0F1015", text: "#FFFFFF", muted: "#94A3B8", surface: "#161822", border: "#232638",
+                accent: "#60A5FA", accentHover: "#3B82F6", dot: "#34D399", radius: "6px", font: "Inter, sans-serif"
+            },
+            {
+                id: 3, family: "swiss", familyName: "Swiss International",
+                name: "03. Basel High-Contrast", inspiration: "Josef Müller-Brockmann",
+                colors: ["#000000", "#111111", "#FFFFFF", "#FFFFFF", "#333333"],
+                bg: "#000000", text: "#FFFFFF", muted: "#A3A3A3", surface: "#111111", border: "#333333",
+                accent: "#FFFFFF", accentHover: "#E5E5E5", dot: "#FFFFFF", radius: "0px", font: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+            },
+            {
+                id: 4, family: "swiss", familyName: "Swiss International",
+                name: "04. Lausanne Soft Slate", inspiration: "Design Catalog, Monocle",
+                colors: ["#F1F5F9", "#FFFFFF", "#0F172A", "#0284C7", "#CBD5E1"],
+                bg: "#F1F5F9", text: "#0F172A", muted: "#475569", surface: "#FFFFFF", border: "#CBD5E1",
+                accent: "#0284C7", accentHover: "#0369A1", dot: "#059669", radius: "10px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 5, family: "swiss", familyName: "Swiss International",
+                name: "05. Lucerne Typography Focus", inspiration: "International Typographic Style",
+                colors: ["#0A0A0A", "#141414", "#EDEDED", "#38BDF8", "#262626"],
+                bg: "#0A0A0A", text: "#EDEDED", muted: "#888888", surface: "#141414", border: "#262626",
+                accent: "#38BDF8", accentHover: "#0284C7", dot: "#10B981", radius: "4px", font: "sans-serif"
+            },
+
+            // FAMILY 2: DEEP SLATE & CARBON EXECUTIVE (6-10)
+            {
+                id: 6, family: "slate", familyName: "Deep Slate",
+                name: "06. Linear Dark Precision", inspiration: "Linear App",
+                colors: ["#08090C", "#0F1015", "#F8FAFC", "#6366F1", "#1E202B"],
+                bg: "#08090C", text: "#F8FAFC", muted: "#818CF8", surface: "#0F1015", border: "#1E202B",
+                accent: "#6366F1", accentHover: "#4F46E5", dot: "#10B981", radius: "8px", font: "Inter, sans-serif"
+            },
+            {
+                id: 7, family: "slate", familyName: "Deep Slate",
+                name: "07. Vercel Carbon Minimal", inspiration: "Vercel / Next.js Dashboard",
+                colors: ["#000000", "#0A0A0A", "#EDEDED", "#0070F3", "#222222"],
+                bg: "#000000", text: "#EDEDED", muted: "#888888", surface: "#0A0A0A", border: "#222222",
+                accent: "#0070F3", accentHover: "#0051C6", dot: "#50E3C2", radius: "6px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 8, family: "slate", familyName: "Deep Slate",
+                name: "08. Apple Developer Stealth", inspiration: "developer.apple.com Dark",
+                colors: ["#161617", "#1D1D1F", "#F5F5F7", "#2997FF", "#333336"],
+                bg: "#161617", text: "#F5F5F7", muted: "#86868B", surface: "#1D1D1F", border: "#333336",
+                accent: "#2997FF", accentHover: "#0071E3", dot: "#30D158", radius: "12px", font: "-apple-system, sans-serif"
+            },
+            {
+                id: 9, family: "slate", familyName: "Deep Slate",
+                name: "09. Superhuman Executive Navy", inspiration: "Superhuman Email",
+                colors: ["#0A0E1A", "#121829", "#FFFFFF", "#F59E0B", "#1E293B"],
+                bg: "#0A0E1A", text: "#FFFFFF", muted: "#94A3B8", surface: "#121829", border: "#1E293B",
+                accent: "#F59E0B", accentHover: "#D97706", dot: "#10B981", radius: "10px", font: "sans-serif"
+            },
+            {
+                id: 10, family: "slate", familyName: "Deep Slate",
+                name: "10. Obsidian Emerald Glow", inspiration: "Obsidian Vault / Matrix Dark",
+                colors: ["#050807", "#0B120E", "#ECFDF5", "#10B981", "#13231A"],
+                bg: "#050807", text: "#ECFDF5", muted: "#6EE7B7", surface: "#0B120E", border: "#13231A",
+                accent: "#10B981", accentHover: "#059669", dot: "#34D399", radius: "8px", font: "system-ui, sans-serif"
+            },
+
+            // FAMILY 3: HACKER TERMINAL & MONOSPACE CLI (11-15)
+            {
+                id: 11, family: "terminal", familyName: "Terminal CLI",
+                name: "11. UNIX Green Phosphor", inspiration: "VT220 CRT Terminal",
+                colors: ["#080C08", "#0E140E", "#22C55E", "#4ADE80", "#1B2A1B"],
+                bg: "#080C08", text: "#22C55E", muted: "#15803D", surface: "#0E140E", border: "#1B2A1B",
+                accent: "#4ADE80", accentHover: "#22C55E", dot: "#4ADE80", radius: "0px", font: "ui-monospace, monospace"
+            },
+            {
+                id: 12, family: "terminal", familyName: "Terminal CLI",
+                name: "12. Amber CRT Cyber", inspiration: "DEC Amber Monochrome",
+                colors: ["#0C0904", "#161108", "#F59E0B", "#FBBF24", "#291E0F"],
+                bg: "#0C0904", text: "#F59E0B", muted: "#B45309", surface: "#161108", border: "#291E0F",
+                accent: "#FBBF24", accentHover: "#F59E0B", dot: "#F59E0B", radius: "2px", font: "ui-monospace, monospace"
+            },
+            {
+                id: 13, family: "terminal", familyName: "Terminal CLI",
+                name: "13. Matrix Cyan SysAdmin", inspiration: "Linux Kernel Hacker",
+                colors: ["#050B10", "#0B1520", "#06B6D4", "#22D3EE", "#122536"],
+                bg: "#050B10", text: "#06B6D4", muted: "#0E7490", surface: "#0B1520", border: "#122536",
+                accent: "#22D3EE", accentHover: "#06B6D4", dot: "#22D3EE", radius: "3px", font: "ui-monospace, monospace"
+            },
+            {
+                id: 14, family: "terminal", familyName: "Terminal CLI",
+                name: "14. Neovim Dark Solarized", inspiration: "Ethan Schoonover Solarized",
+                colors: ["#002B36", "#073642", "#93A1A1", "#268BD2", "#094352"],
+                bg: "#002B36", text: "#93A1A1", muted: "#586E75", surface: "#073642", border: "#094352",
+                accent: "#268BD2", accentHover: "#2AA198", dot: "#859900", radius: "4px", font: "ui-monospace, monospace"
+            },
+            {
+                id: 15, family: "terminal", familyName: "Terminal CLI",
+                name: "15. Bloomberg Terminal Contrast", inspiration: "Financial Data Console",
+                colors: ["#000000", "#111111", "#FF9900", "#FFCC00", "#332200"],
+                bg: "#000000", text: "#FFFFFF", muted: "#FF9900", surface: "#111111", border: "#443300",
+                accent: "#FF9900", accentHover: "#FFB84D", dot: "#00FF66", radius: "0px", font: "ui-monospace, Consolas, monospace"
+            },
+
+            // FAMILY 4: TECHNICAL BLUEPRINT & SYSTEMS GRID (16-20)
+            {
+                id: 16, family: "blueprint", familyName: "Technical Blueprint",
+                name: "16. Architectural Blue Grid", inspiration: "Cyanotype Engineering Blueprint",
+                colors: ["#0A192F", "#0F2442", "#CCD6F6", "#64FFDA", "#1B3B68"],
+                bg: "#0A192F", text: "#CCD6F6", muted: "#8892B0", surface: "#0F2442", border: "#1B3B68",
+                accent: "#64FFDA", accentHover: "#52DEB9", dot: "#64FFDA", radius: "4px", font: "system-ui, sans-serif",
+                pattern: "linear-gradient(rgba(100,255,218,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(100,255,218,0.04) 1px, transparent 1px)"
+            },
+            {
+                id: 17, family: "blueprint", familyName: "Technical Blueprint",
+                name: "17. Dark CAD Schematics", inspiration: "Autodesk CAD Dark Interface",
+                colors: ["#0B0E14", "#121721", "#E2E8F0", "#38BDF8", "#1E2638"],
+                bg: "#0B0E14", text: "#E2E8F0", muted: "#64748B", surface: "#121721", border: "#1E2638",
+                accent: "#38BDF8", accentHover: "#0284C7", dot: "#10B981", radius: "2px", font: "monospace",
+                pattern: "linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px)"
+            },
+            {
+                id: 18, family: "blueprint", familyName: "Technical Blueprint",
+                name: "18. Circuit PCB Trace", inspiration: "Dark Hardware PCB Board",
+                colors: ["#040B07", "#091710", "#D1FAE5", "#10B981", "#122E20"],
+                bg: "#040B07", text: "#D1FAE5", muted: "#6EE7B7", surface: "#091710", border: "#122E20",
+                accent: "#10B981", accentHover: "#059669", dot: "#F59E0B", radius: "6px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 19, family: "blueprint", familyName: "Technical Blueprint",
+                name: "19. Aerospace Avionics HUD", inspiration: "Cockpit Glass Avionics",
+                colors: ["#000000", "#080C14", "#E0F2FE", "#0284C7", "#0C233C"],
+                bg: "#000000", text: "#E0F2FE", muted: "#7DD3FC", surface: "#080C14", border: "#0C233C",
+                accent: "#38BDF8", accentHover: "#0284C7", dot: "#38BDF8", radius: "0px", font: "ui-monospace, monospace"
+            },
+            {
+                id: 20, family: "blueprint", familyName: "Technical Blueprint",
+                name: "20. White Paper Draft", inspiration: "Paper Architectural Drawing",
+                colors: ["#F8FAFC", "#FFFFFF", "#0F172A", "#2563EB", "#CBD5E1"],
+                bg: "#F8FAFC", text: "#0F172A", muted: "#64748B", surface: "#FFFFFF", border: "#CBD5E1",
+                accent: "#2563EB", accentHover: "#1D4ED8", dot: "#10B981", radius: "4px", font: "sans-serif",
+                pattern: "linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px)"
+            },
+
+            // FAMILY 5: CYBERNETIC & HIGH-TECH OBSIDIAN (21-25)
+            {
+                id: 21, family: "cyber", familyName: "Cyber Obsidian",
+                name: "21. Neo Tokyo Violet", inspiration: "Cyberpunk Stealth",
+                colors: ["#07080E", "#0F111E", "#F8FAFC", "#8B5CF6", "#1E2138"],
+                bg: "#07080E", text: "#F8FAFC", muted: "#A78BFA", surface: "#0F111E", border: "#1E2138",
+                accent: "#8B5CF6", accentHover: "#7C3AED", dot: "#EC4899", radius: "10px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 22, family: "cyber", familyName: "Cyber Obsidian",
+                name: "22. Quantum Radial Core", inspiration: "Deep Space Quantum Supercomputer",
+                colors: ["#030712", "#0B1120", "#F9FAFB", "#3B82F6", "#1F2937"],
+                bg: "#030712", text: "#F9FAFB", muted: "#9CA3AF", surface: "#0B1120", border: "#1F2937",
+                accent: "#3B82F6", accentHover: "#2563EB", dot: "#60A5FA", radius: "12px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 23, family: "cyber", familyName: "Cyber Obsidian",
+                name: "23. Chamfered Shard", inspiration: "Industrial Mecha Angles",
+                colors: ["#09090B", "#121216", "#FAFAFA", "#E11D48", "#27272A"],
+                bg: "#09090B", text: "#FAFAFA", muted: "#A1A1AA", surface: "#121216", border: "#27272A",
+                accent: "#E11D48", accentHover: "#BE123C", dot: "#FB7185", radius: "0px", font: "sans-serif"
+            },
+            {
+                id: 24, family: "cyber", familyName: "Cyber Obsidian",
+                name: "24. Deep Void Monochrome", inspiration: "Pure OLED Absence of Light",
+                colors: ["#000000", "#050505", "#FFFFFF", "#FFFFFF", "#1A1A1A"],
+                bg: "#000000", text: "#FFFFFF", muted: "#737373", surface: "#050505", border: "#1A1A1A",
+                accent: "#FFFFFF", accentHover: "#CCCCCC", dot: "#FFFFFF", radius: "6px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 25, family: "cyber", familyName: "Cyber Obsidian",
+                name: "25. Hyper-Glass Translucent", inspiration: "macOS Tahoe / VisionOS Glass",
+                colors: ["#030508", "rgba(15,23,42,0.65)", "#F8FAFC", "#38BDF8", "rgba(255,255,255,0.1)"],
+                bg: "#030508", text: "#F8FAFC", muted: "#94A3B8", surface: "rgba(15,23,42,0.65)", border: "rgba(255,255,255,0.12)",
+                accent: "#38BDF8", accentHover: "#0284C7", dot: "#34D399", radius: "16px", font: "system-ui, sans-serif"
+            },
+
+            // FAMILY 6: WARM CRAFT & ARCHITECTURAL MONOLITH (26-30)
+            {
+                id: 26, family: "craft", familyName: "Warm Craft",
+                name: "26. Stripe Press Editorial", inspiration: "Stripe Press Book Binding",
+                colors: ["#FAF8F5", "#FFFFFF", "#1C1917", "#D97706", "#E7E5E4"],
+                bg: "#FAF8F5", text: "#1C1917", muted: "#78716C", surface: "#FFFFFF", border: "#E7E5E4",
+                accent: "#D97706", accentHover: "#B45309", dot: "#059669", radius: "6px", font: "Georgia, serif"
+            },
+            {
+                id: 27, family: "craft", familyName: "Warm Craft",
+                name: "27. Nordic Sand & Charcoal", inspiration: "Scandinavian Architectural Studio",
+                colors: ["#EFECE6", "#F9F8F5", "#292524", "#44403C", "#D6D3CD"],
+                bg: "#EFECE6", text: "#292524", muted: "#78716C", surface: "#F9F8F5", border: "#D6D3CD",
+                accent: "#292524", accentHover: "#1C1917", dot: "#15803D", radius: "4px", font: "system-ui, sans-serif"
+            },
+            {
+                id: 28, family: "craft", familyName: "Warm Craft",
+                name: "28. Neo-Brutalist Solid Shadow", inspiration: "Gumroad / Figma Neo-Brutalism",
+                colors: ["#F5F5F0", "#FFFFFF", "#000000", "#2563EB", "#000000"],
+                bg: "#F5F5F0", text: "#000000", muted: "#4B5563", surface: "#FFFFFF", border: "#000000",
+                accent: "#2563EB", accentHover: "#1D4ED8", dot: "#10B981", radius: "0px", font: "sans-serif",
+                shadow: "4px 4px 0px #000000"
+            },
+            {
+                id: 29, family: "craft", familyName: "Warm Craft",
+                name: "29. Dark Brutalist Monolith", inspiration: "Brutalist Architecture In Concrete",
+                colors: ["#121212", "#1C1C1C", "#F0F0F0", "#F0F0F0", "#383838"],
+                bg: "#121212", text: "#F0F0F0", muted: "#9E9E9E", surface: "#1C1C1C", border: "#383838",
+                accent: "#FFFFFF", accentHover: "#D6D6D6", dot: "#00FF66", radius: "0px", font: "system-ui, sans-serif",
+                shadow: "5px 5px 0px #000000"
+            },
+            {
+                id: 30, family: "craft", familyName: "Warm Craft",
+                name: "30. Kyoto Zen Silence", inspiration: "Japanese Wood & Stone Minimal",
+                colors: ["#171615", "#1F1E1D", "#EBE7DF", "#A8A29E", "#2E2D2B"],
+                bg: "#171615", text: "#EBE7DF", muted: "#A8A29E", surface: "#1F1E1D", border: "#2E2D2B",
+                accent: "#D6D3CD", accentHover: "#FFFFFF", dot: "#84CC16", radius: "4px", font: "sans-serif"
+            }
+        ];
+
+        let currentVariantIndex = 0;
+
+        function initExplorer() {
+            const select = document.getElementById('variantSelect');
+            select.innerHTML = '';
+            VARIANTS.forEach((v, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `${v.name} (${v.familyName})`;
+                select.appendChild(opt);
+            });
+            loadVariant(0);
+        }
+
+        function loadVariant(index) {
+            currentVariantIndex = parseInt(index);
+            document.getElementById('variantSelect').value = currentVariantIndex;
+            const v = VARIANTS[currentVariantIndex];
+
+            // Update Metadata Info
+            document.getElementById('infoName').textContent = v.name;
+            document.getElementById('infoFamily').textContent = v.familyName;
+            document.getElementById('infoInspiration').textContent = v.inspiration;
+
+            // Update Swatches
+            const swatches = document.getElementById('swatchesContainer');
+            swatches.innerHTML = '';
+            v.colors.forEach(col => {
+                const div = document.createElement('div');
+                div.className = 'swatch';
+                div.style.background = col;
+                div.title = col;
+                swatches.appendChild(div);
+            });
+
+            // Generate Dynamic CSS
+            const dynamicCSS = `
+                #portfolioViewport {
+                    background-color: ${v.bg};
+                    ${v.pattern ? `background-image: ${v.pattern}; background-size: 24px 24px;` : ''}
+                    color: ${v.text};
+                    font-family: ${v.font};
+                }
+                .port-container {
+                    max-width: 950px;
+                    margin: 0 auto;
+                    padding: 3rem 1.5rem;
+                }
+                .port-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-bottom: 2rem;
+                    border-bottom: 1px solid ${v.border};
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                }
+                .port-brand { display: flex; align-items: center; gap: 0.6rem; }
+                .port-logo svg { width: 24px; height: 24px; stroke: ${v.accent}; }
+                .port-wordmark { font-weight: 700; letter-spacing: 0.05em; color: ${v.text}; font-size: 1.1rem; }
+                .port-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background: ${v.surface};
+                    border: 1px solid ${v.border};
+                    padding: 0.3rem 0.75rem;
+                    border-radius: ${v.radius};
+                    font-size: 0.8rem;
+                    color: ${v.muted};
+                    ${v.shadow ? `box-shadow: ${v.shadow};` : ''}
+                }
+                .port-dot { width: 8px; height: 8px; background: ${v.dot}; border-radius: 50%; }
+                .port-nav { display: flex; gap: 1.25rem; }
+                .port-nav a { color: ${v.muted}; font-size: 0.9rem; text-decoration: none; font-weight: 500; }
+                .port-nav a:hover { color: ${v.text}; }
+
+                .port-hero { padding: 4rem 0 3rem 0; }
+                .port-kicker { font-size: 0.8rem; letter-spacing: 0.1em; color: ${v.accent}; font-weight: 700; margin-bottom: 1rem; }
+                .port-title { font-size: 2.75rem; line-height: 1.2; font-weight: 700; color: ${v.text}; margin-bottom: 1.25rem; }
+                .port-lead { font-size: 1.15rem; color: ${v.muted}; line-height: 1.6; margin-bottom: 2rem; max-width: 780px; }
+                .port-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+                
+                .port-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: ${v.radius};
+                    font-weight: 600;
+                    font-size: 0.95rem;
+                    text-decoration: none;
+                    transition: all 0.2s;
+                    cursor: pointer;
+                    ${v.shadow ? `box-shadow: ${v.shadow};` : ''}
+                }
+                .port-btn-primary {
+                    background: ${v.accent};
+                    color: #FFFFFF;
+                    border: 1px solid ${v.accent};
+                }
+                .port-btn-primary:hover { background: ${v.accentHover}; }
+                .port-btn-secondary {
+                    background: ${v.surface};
+                    color: ${v.text};
+                    border: 1px solid ${v.border};
+                }
+                .port-btn-secondary:hover { border-color: ${v.accent}; }
+
+                .port-section { padding: 3.5rem 0; border-top: 1px solid ${v.border}; }
+                .port-sec-head { margin-bottom: 2rem; }
+                .port-sec-title { font-size: 1.75rem; font-weight: 700; color: ${v.text}; margin-bottom: 0.25rem; }
+                .port-sec-sub { font-size: 0.9rem; color: ${v.muted}; }
+
+                .port-card {
+                    background: ${v.surface};
+                    border: 1px solid ${v.border};
+                    border-radius: ${v.radius};
+                    padding: 2.25rem;
+                    ${v.shadow ? `box-shadow: ${v.shadow};` : ''}
+                }
+                .card-top { margin-bottom: 1rem; }
+                .card-meta { display: flex; gap: 0.75rem; margin-bottom: 0.5rem; align-items: center; }
+                .card-tag { font-size: 0.75rem; font-weight: 700; color: ${v.accent}; letter-spacing: 0.05em; }
+                .card-version { font-size: 0.75rem; color: ${v.muted}; }
+                .card-title { font-size: 1.6rem; font-weight: 700; color: ${v.text}; }
+                .card-desc { color: ${v.muted}; font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
+
+                .arch-pills { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+                .arch-pill {
+                    background: rgba(0,0,0,0.06);
+                    border: 1px solid ${v.border};
+                    border-radius: ${v.radius};
+                    padding: 1rem;
+                }
+                .arch-pill strong { display: block; font-size: 0.9rem; color: ${v.accent}; margin-bottom: 0.25rem; }
+                .arch-pill span { font-size: 0.8rem; color: ${v.muted}; line-height: 1.4; display: block; }
+
+                .card-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+                .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+                .stack-box {
+                    background: ${v.surface};
+                    border: 1px solid ${v.border};
+                    border-radius: ${v.radius};
+                    padding: 1.5rem;
+                    ${v.shadow ? `box-shadow: ${v.shadow};` : ''}
+                }
+                .stack-box h4 { font-size: 1.05rem; color: ${v.text}; margin-bottom: 0.5rem; }
+                .stack-box p { font-size: 0.85rem; color: ${v.muted}; line-height: 1.5; }
+
+                .port-footer {
+                    padding: 3rem 0 1rem 0;
+                    border-top: 1px solid ${v.border};
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    font-size: 0.85rem;
+                    color: ${v.muted};
+                }
+                .foot-links { display: flex; gap: 1.25rem; }
+                .foot-links a { color: ${v.muted}; text-decoration: none; }
+                .foot-links a:hover { color: ${v.text}; }
+            `;
+
+            document.getElementById('dynamicThemeStyles').textContent = dynamicCSS;
+        }
+
+        function filterFamily(family) {
+            document.querySelectorAll('.family-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const select = document.getElementById('variantSelect');
+            select.innerHTML = '';
+            VARIANTS.forEach((v, idx) => {
+                if (family === 'all' || v.family === family) {
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.textContent = `${v.name} (${v.familyName})`;
+                    select.appendChild(opt);
+                }
+            });
+            if (select.options.length > 0) {
+                loadVariant(select.options[0].value);
+            }
+        }
+
+        function prevVariant() {
+            let nextIdx = currentVariantIndex - 1;
+            if (nextIdx < 0) nextIdx = VARIANTS.length - 1;
+            loadVariant(nextIdx);
+        }
+
+        function nextVariant() {
+            let nextIdx = currentVariantIndex + 1;
+            if (nextIdx >= VARIANTS.length) nextIdx = 0;
+            loadVariant(nextIdx);
+        }
+
+        window.onload = initExplorer;
+    </script>
+</body>
+</html>

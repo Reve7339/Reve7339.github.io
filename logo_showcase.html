@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Logotipos & Monogramas · Ivan Yerry Hinojosa</title>
+    <style>
+        :root {
+            --bg-black: #050608;
+            --surface-1: #0D0E14;
+            --surface-2: #141622;
+            --border: #1E2235;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --cobalt: #2563EB;
+            --cobalt-glow: rgba(37, 99, 235, 0.25);
+            --emerald: #10B981;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            padding: 3rem 1.5rem;
+            line-height: 1.5;
+        }
+        .container { max-width: 1300px; margin: 0 auto; }
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.12);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: #60A5FA;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        h1 { font-size: 2.75rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+        p.subtitle { color: var(--text-secondary); font-size: 1.15rem; max-width: 750px; margin: 0 auto; }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 2.5rem 0;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--cobalt);
+            color: #fff;
+            border-color: var(--cobalt);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+        .logo-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .logo-card:hover {
+            transform: translateY(-4px);
+            border-color: #3B82F6;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--cobalt-glow);
+        }
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        .logo-num {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #60A5FA;
+            font-weight: bold;
+        }
+        .logo-tag {
+            font-size: 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            color: var(--text-secondary);
+        }
+        .logo-display {
+            background: #000000;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-display svg {
+            width: 80px;
+            height: 80px;
+            transition: transform 0.3s ease;
+        }
+        .logo-card:hover .logo-display svg {
+            transform: scale(1.1);
+        }
+        .card-body h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+        }
+        .card-body p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+        }
+        
+        /* Previews row */
+        .preview-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+        .mockup-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .mini-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            border: 1px solid var(--border);
+        }
+        .mini-icon.circle { border-radius: 50%; }
+        .mini-icon svg { width: 16px; height: 16px; }
+        .mini-icon.light { background: #FFFFFF; }
+        
+        .header-mockup {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #fff;
+            padding: 0.4rem 0.6rem;
+            background: #000;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            flex-grow: 1;
+        }
+        .header-mockup svg { width: 14px; height: 14px; }
+        
+        .copy-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+        .copy-btn:hover {
+            background: #1E293B;
+            border-color: #64748B;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #10B981;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">Catálogo Visual Exclusivo · Identidad Personal</div>
+            <h1>Logotipos & Monogramas Vectoriales</h1>
+            <p class="subtitle">Exploración de identidades de marca para <strong>Ivan Yerry Hinojosa</strong> (Software Engineer & AI Systems Architect). Conceptos matemáticos, arquitectónicos y de sistemas distribuidos.</p>
+            
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterLogos('all')">Todos (16)</button>
+                <button class="filter-btn" onclick="filterLogos('monogram')">Monogramas IYH / Y (4)</button>
+                <button class="filter-btn" onclick="filterLogos('distributed')">Sistemas Distribuidos (4)</button>
+                <button class="filter-btn" onclick="filterLogos('ai-vector')">IA & Vectores (4)</button>
+                <button class="filter-btn" onclick="filterLogos('minimal')">Geometría Minimalista (4)</button>
+            </div>
+        </header>
+
+        <div class="grid" id="logosGrid">
+
+            <!-- LOGO 1: Architectural Geometric Y -->
+            <div class="logo-card" data-cat="monogram">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 01</span>
+                    <span class="logo-tag">Monograma Y</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 25L50 55M78 25L50 55M50 55V85" stroke="#3B82F6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="55" r="5" fill="#60A5FA"/>
+                        <circle cx="22" cy="25" r="4" fill="#93C5FD"/>
+                        <circle cx="78" cy="25" r="4" fill="#93C5FD"/>
+                        <circle cx="50" cy="85" r="4" fill="#93C5FD"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Architectural Y-Node</h3>
+                    <p>Monograma de la 'Y' estilizado como grafo de bifurcación de datos y convergencia en un nodo central. Representa concurrencia y flujo unidireccional.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 28L50 55M75 28L50 55M50 55V82" stroke="#3B82F6" stroke-width="10" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 28L50 55M75 28L50 55M50 55V82" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 28L50 55M75 28L50 55M50 55V82" stroke="#3B82F6" stroke-width="10" stroke-linecap="round"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 2: Triquetra Distributed Mesh -->
+            <div class="logo-card" data-cat="distributed">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 02</span>
+                    <span class="logo-tag">Sistemas Distribuidos</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,18 82,74 18,74" stroke="#2563EB" stroke-width="5" stroke-linejoin="round" fill="rgba(37,99,235,0.08)"/>
+                        <circle cx="50" cy="18" r="8" fill="#3B82F6"/>
+                        <circle cx="82" cy="74" r="8" fill="#60A5FA"/>
+                        <circle cx="18" cy="74" r="8" fill="#93C5FD"/>
+                        <circle cx="50" cy="55" r="4" fill="#FFFFFF"/>
+                        <line x1="50" y1="18" x2="50" y2="55" stroke="#60A5FA" stroke-width="2" stroke-dasharray="3 3"/>
+                        <line x1="82" y1="74" x2="50" y2="55" stroke="#60A5FA" stroke-width="2" stroke-dasharray="3 3"/>
+                        <line x1="18" y1="74" x2="50" y2="55" stroke="#60A5FA" stroke-width="2" stroke-dasharray="3 3"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Tri-Mesh Cluster</h3>
+                    <p>Malla de 3 nodos de alta resiliencia. Simboliza el trípode del ecosistema: Go Backend, Cliente Móvil Flutter y Motores de IA Vectoriales.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 80,72 20,72" stroke="#3B82F6" stroke-width="8"/><circle cx="50" cy="22" r="7" fill="#60A5FA"/><circle cx="80" cy="72" r="7" fill="#60A5FA"/><circle cx="20" cy="72" r="7" fill="#60A5FA"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 80,72 20,72" stroke="#1D4ED8" stroke-width="8"/><circle cx="50" cy="22" r="7" fill="#1D4ED8"/><circle cx="80" cy="72" r="7" fill="#1D4ED8"/><circle cx="20" cy="72" r="7" fill="#1D4ED8"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 80,72 20,72" stroke="#3B82F6" stroke-width="8"/><circle cx="50" cy="22" r="6" fill="#60A5FA"/><circle cx="80" cy="72" r="6" fill="#60A5FA"/><circle cx="20" cy="72" r="6" fill="#60A5FA"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 3: IYH Interlocking Monogram -->
+            <div class="logo-card" data-cat="monogram">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 03</span>
+                    <span class="logo-tag">Monograma IYH</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- I -->
+                        <line x1="28" y1="25" x2="28" y2="75" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+                        <!-- Y / H bridge -->
+                        <path d="M48 25L62 50V75" stroke="#3B82F6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M76 25L62 50" stroke="#3B82F6" stroke-width="7" stroke-linecap="round"/>
+                        <line x1="28" y1="50" x2="62" y2="50" stroke="#60A5FA" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>IYH Bauhaus Geometric</h3>
+                    <p>Monograma monolítico que entrelaza la 'I', 'Y' y 'H' en un solo glifo unificado. Máxima sobriedad ejecutiva inspirada en tipografía suiza.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><line x1="28" y1="28" x2="28" y2="72" stroke="#fff" stroke-width="8"/><path d="M48 28L62 50V72M76 28L62 50" stroke="#3B82F6" stroke-width="8"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><line x1="28" y1="28" x2="28" y2="72" stroke="#000" stroke-width="8"/><path d="M48 28L62 50V72M76 28L62 50" stroke="#2563EB" stroke-width="8"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><line x1="28" y1="28" x2="28" y2="72" stroke="#fff" stroke-width="8"/><path d="M48 28L62 50V72M76 28L62 50" stroke="#3B82F6" stroke-width="8"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 4: Vector Tensor Core -->
+            <div class="logo-card" data-cat="ai-vector">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 04</span>
+                    <span class="logo-tag">IA & Tensores</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 3D Isometric Tensor Box -->
+                        <polygon points="50,18 80,35 50,52 20,35" stroke="#60A5FA" stroke-width="3" fill="rgba(96,165,250,0.15)"/>
+                        <polygon points="20,35 50,52 50,85 20,68" stroke="#3B82F6" stroke-width="3" fill="rgba(59,130,246,0.25)"/>
+                        <polygon points="80,35 50,52 50,85 80,68" stroke="#1D4ED8" stroke-width="3" fill="rgba(29,78,216,0.35)"/>
+                        <circle cx="50" cy="52" r="5" fill="#FFFFFF"/>
+                        <!-- Inner vector axis -->
+                        <line x1="50" y1="52" x2="50" y2="28" stroke="#FFFFFF" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Isometric Tensor Core</h3>
+                    <p>Espacio vectorial tridimensional proyectado en perspectiva isométrica. Representa los espacios latentes de alta dimensión y pgvector.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 75,37 50,52 25,37" stroke="#60A5FA" stroke-width="4"/><polygon points="25,37 50,52 50,78 25,63" stroke="#3B82F6" stroke-width="4"/><polygon points="75,37 50,52 50,78 75,63" stroke="#1D4ED8" stroke-width="4"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 75,37 50,52 25,37" stroke="#1D4ED8" stroke-width="4"/><polygon points="25,37 50,52 50,78 25,63" stroke="#2563EB" stroke-width="4"/><polygon points="75,37 50,52 50,78 75,63" stroke="#3B82F6" stroke-width="4"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,22 75,37 50,52 25,37" stroke="#60A5FA" stroke-width="4"/><polygon points="25,37 50,52 50,78 25,63" stroke="#3B82F6" stroke-width="4"/><polygon points="75,37 50,52 50,78 75,63" stroke="#1D4ED8" stroke-width="4"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 5: Kinetic Delta -->
+            <div class="logo-card" data-cat="minimal">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 05</span>
+                    <span class="logo-tag">Geometría Minimal</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 18L84 76H16L50 18Z" stroke="#FFFFFF" stroke-width="4"/>
+                        <path d="M50 36L70 70H30L50 36Z" fill="#2563EB"/>
+                        <circle cx="50" cy="52" r="3" fill="#FFFFFF"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Kinetic Delta Prism</h3>
+                    <p>Símbolo delta cinético (cambio y aceleración). Doble triángulo concéntrico con núcleo azul cobalto que evoca precisión aeroespacial.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M50 22L80 74H20L50 22Z" stroke="#fff" stroke-width="6"/><path d="M50 40L68 70H32L50 40Z" fill="#3B82F6"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M50 22L80 74H20L50 22Z" stroke="#000" stroke-width="6"/><path d="M50 40L68 70H32L50 40Z" fill="#2563EB"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M50 22L80 74H20L50 22Z" stroke="#fff" stroke-width="6"/><path d="M50 40L68 70H32L50 40Z" fill="#3B82F6"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 6: Hexagonal Clean Architecture -->
+            <div class="logo-card" data-cat="distributed">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 06</span>
+                    <span class="logo-tag">Arquitectura Hexagonal</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="50,15 85,35 85,75 50,95 15,75 15,35" stroke="#3B82F6" stroke-width="4"/>
+                        <polygon points="50,30 72,42 72,68 50,80 28,68 28,42" stroke="#60A5FA" stroke-width="2" stroke-dasharray="4 4"/>
+                        <circle cx="50" cy="55" r="7" fill="#FFFFFF"/>
+                        <!-- 6 peripheral ports -->
+                        <circle cx="50" cy="15" r="4" fill="#3B82F6"/>
+                        <circle cx="85" cy="35" r="4" fill="#3B82F6"/>
+                        <circle cx="85" cy="75" r="4" fill="#3B82F6"/>
+                        <circle cx="50" cy="95" r="4" fill="#3B82F6"/>
+                        <circle cx="15" cy="75" r="4" fill="#3B82F6"/>
+                        <circle cx="15" cy="35" r="4" fill="#3B82F6"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Hexagonal Ports & Core</h3>
+                    <p>Homenaje directo a la Clean Architecture (Ports & Adapters). Representa un núcleo de dominio protegido con 6 adaptadores periféricos.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,20 80,38 80,72 50,90 20,72 20,38" stroke="#3B82F6" stroke-width="6"/><circle cx="50" cy="55" r="6" fill="#fff"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,20 80,38 80,72 50,90 20,72 20,38" stroke="#1D4ED8" stroke-width="6"/><circle cx="50" cy="55" r="6" fill="#000"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><polygon points="50,20 80,38 80,72 50,90 20,72 20,38" stroke="#3B82F6" stroke-width="6"/><circle cx="50" cy="55" r="6" fill="#fff"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 7: Prompt Terminal Monolith -->
+            <div class="logo-card" data-cat="minimal">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 07</span>
+                    <span class="logo-tag">CLI & Sistemas</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="18" y="20" width="64" height="60" rx="8" stroke="#334155" stroke-width="4" fill="#0A0B10"/>
+                        <path d="M30 40L45 50L30 60" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="52" y1="60" x2="68" y2="60" stroke="#10B981" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Terminal Prompt Frame</h3>
+                    <p>El símbolo clásico del desarrollador de sistemas: el chevron de ejecución (`>`) y el cursor palpitante verde esmeralda (`_`).</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M32 40L47 50L32 60" stroke="#3B82F6" stroke-width="8" stroke-linecap="round"/><line x1="54" y1="60" x2="68" y2="60" stroke="#10B981" stroke-width="8" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M32 40L47 50L32 60" stroke="#1D4ED8" stroke-width="8" stroke-linecap="round"/><line x1="54" y1="60" x2="68" y2="60" stroke="#059669" stroke-width="8" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M32 40L47 50L32 60" stroke="#3B82F6" stroke-width="8" stroke-linecap="round"/><line x1="54" y1="60" x2="68" y2="60" stroke="#10B981" stroke-width="8" stroke-linecap="round"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 8: Infinite Goroutine Ring -->
+            <div class="logo-card" data-cat="distributed">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 08</span>
+                    <span class="logo-tag">Concurrencia Go</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 50C30 38 40 30 50 30C62 30 70 38 70 50C70 62 60 70 50 70C38 70 30 62 30 50Z" stroke="#3B82F6" stroke-width="5" stroke-dasharray="12 6"/>
+                        <circle cx="50" cy="30" r="5" fill="#60A5FA"/>
+                        <circle cx="70" cy="50" r="5" fill="#3B82F6"/>
+                        <circle cx="50" cy="70" r="5" fill="#2563EB"/>
+                        <circle cx="30" cy="50" r="5" fill="#1D4ED8"/>
+                        <circle cx="50" cy="50" r="6" fill="#FFFFFF"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Goroutine Event Loop</h3>
+                    <p>Anillo dinámico que representa la orquestación concurrente de Go, los canales sin bloqueo y los pipelines de procesamiento asíncrono.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="25" stroke="#3B82F6" stroke-width="6" stroke-dasharray="10 5"/><circle cx="50" cy="50" r="6" fill="#fff"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="25" stroke="#1D4ED8" stroke-width="6" stroke-dasharray="10 5"/><circle cx="50" cy="50" r="6" fill="#000"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="25" stroke="#3B82F6" stroke-width="6" stroke-dasharray="10 5"/><circle cx="50" cy="50" r="5" fill="#fff"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 9: Neural Projection Vectors -->
+            <div class="logo-card" data-cat="ai-vector">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 09</span>
+                    <span class="logo-tag">Búsqueda Semántica</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="6" fill="#3B82F6"/>
+                        <circle cx="75" cy="25" r="5" fill="#60A5FA"/>
+                        <circle cx="45" cy="70" r="7" fill="#2563EB"/>
+                        <circle cx="80" cy="75" r="4" fill="#93C5FD"/>
+                        <!-- Cosine similarity vectors -->
+                        <line x1="30" y1="30" x2="75" y2="25" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="30" y1="30" x2="45" y2="70" stroke="#3B82F6" stroke-width="2"/>
+                        <line x1="75" y1="25" x2="45" y2="70" stroke="#60A5FA" stroke-width="1.5" stroke-dasharray="4 4"/>
+                        <line x1="45" y1="70" x2="80" y2="75" stroke="#3B82F6" stroke-width="2"/>
+                        <!-- Target similarity centroid -->
+                        <circle cx="52" cy="48" r="4" fill="#10B981"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Semantic Vector Space</h3>
+                    <p>Constelación de embeddings y similitud de coseno. El punto verde esmeralda marca el centroide de contexto relevante recuperado por RAG.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="30" cy="30" r="6" fill="#3B82F6"/><circle cx="75" cy="30" r="5" fill="#60A5FA"/><circle cx="50" cy="70" r="7" fill="#2563EB"/><line x1="30" y1="30" x2="75" y2="30" stroke="#3B82F6" stroke-width="3"/><line x1="30" y1="30" x2="50" y2="70" stroke="#3B82F6" stroke-width="3"/><line x1="75" y1="30" x2="50" y2="70" stroke="#3B82F6" stroke-width="3"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="30" cy="30" r="6" fill="#1D4ED8"/><circle cx="75" cy="30" r="5" fill="#2563EB"/><circle cx="50" cy="70" r="7" fill="#1D4ED8"/><line x1="30" y1="30" x2="75" y2="30" stroke="#1D4ED8" stroke-width="3"/><line x1="30" y1="30" x2="50" y2="70" stroke="#1D4ED8" stroke-width="3"/><line x1="75" y1="30" x2="50" y2="70" stroke="#1D4ED8" stroke-width="3"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><circle cx="30" cy="30" r="6" fill="#3B82F6"/><circle cx="75" cy="30" r="5" fill="#60A5FA"/><circle cx="50" cy="70" r="7" fill="#2563EB"/><line x1="30" y1="30" x2="75" y2="30" stroke="#3B82F6" stroke-width="3"/><line x1="30" y1="30" x2="50" y2="70" stroke="#3B82F6" stroke-width="3"/><line x1="75" y1="30" x2="50" y2="70" stroke="#3B82F6" stroke-width="3"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 10: Pure Silicon Diamond -->
+            <div class="logo-card" data-cat="minimal">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 10</span>
+                    <span class="logo-tag">Geometría Minimal</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="22" y="22" width="56" height="56" rx="6" transform="rotate(45 50 50)" stroke="#FFFFFF" stroke-width="4"/>
+                        <rect x="32" y="32" width="36" height="36" rx="4" transform="rotate(45 50 50)" fill="#2563EB"/>
+                        <circle cx="50" cy="50" r="4" fill="#FFFFFF"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Silicon Diamond Prism</h3>
+                    <p>Diamante facetado rotado a 45 grados. Proyecta solidez, criptografía, llaves seguras y algoritmos matemáticos deterministas.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="25" y="25" width="50" height="50" rx="4" transform="rotate(45 50 50)" stroke="#fff" stroke-width="6"/><rect x="34" y="34" width="32" height="32" rx="3" transform="rotate(45 50 50)" fill="#3B82F6"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="25" y="25" width="50" height="50" rx="4" transform="rotate(45 50 50)" stroke="#000" stroke-width="6"/><rect x="34" y="34" width="32" height="32" rx="3" transform="rotate(45 50 50)" fill="#2563EB"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="25" y="25" width="50" height="50" rx="4" transform="rotate(45 50 50)" stroke="#fff" stroke-width="6"/><rect x="34" y="34" width="32" height="32" rx="3" transform="rotate(45 50 50)" fill="#3B82F6"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 11: Modular Matrix Core -->
+            <div class="logo-card" data-cat="ai-vector">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 11</span>
+                    <span class="logo-tag">Arquitectura Modular</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 4 modular blocks -->
+                        <rect x="22" y="22" width="22" height="22" rx="4" fill="#3B82F6"/>
+                        <rect x="56" y="22" width="22" height="22" rx="4" fill="#1D4ED8"/>
+                        <rect x="22" y="56" width="22" height="22" rx="4" fill="#1E40AF"/>
+                        <rect x="56" y="56" width="22" height="22" rx="4" stroke="#60A5FA" stroke-width="3" stroke-dasharray="3 3"/>
+                        <!-- Interconnection cross -->
+                        <circle cx="50" cy="50" r="6" fill="#FFFFFF"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Modular Monolith Grid</h3>
+                    <p>4 módulos coordinados por un bus central. Refleja la arquitectura de monolito modular en Go y microservicios independientes.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="24" y="24" width="20" height="20" rx="4" fill="#3B82F6"/><rect x="56" y="24" width="20" height="20" rx="4" fill="#1D4ED8"/><rect x="24" y="56" width="20" height="20" rx="4" fill="#1E40AF"/><circle cx="50" cy="50" r="5" fill="#fff"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="24" y="24" width="20" height="20" rx="4" fill="#2563EB"/><rect x="56" y="24" width="20" height="20" rx="4" fill="#1D4ED8"/><rect x="24" y="56" width="20" height="20" rx="4" fill="#3B82F6"/><circle cx="50" cy="50" r="5" fill="#000"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><rect x="24" y="24" width="20" height="20" rx="4" fill="#3B82F6"/><rect x="56" y="24" width="20" height="20" rx="4" fill="#1D4ED8"/><rect x="24" y="56" width="20" height="20" rx="4" fill="#1E40AF"/><circle cx="50" cy="50" r="4" fill="#fff"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+            <!-- LOGO 12: Binary Cross Y -->
+            <div class="logo-card" data-cat="monogram">
+                <div class="card-head">
+                    <span class="logo-num">LOGOTIPO 12</span>
+                    <span class="logo-tag">Monograma Y</span>
+                </div>
+                <div class="logo-display">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 22L50 50L75 22" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M50 50V82" stroke="#3B82F6" stroke-width="7" stroke-linecap="round"/>
+                        <rect x="44" y="44" width="12" height="12" rx="2" fill="#60A5FA"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3>Minimalist Y-Axis</h3>
+                    <p>La máxima síntesis visual de la 'Y'. Dos diagonales que se encuentran en un punto de anclaje y descienden como un eje cartesiano vertical.</p>
+                    <div class="preview-row">
+                        <div class="mini-icon circle">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 25L50 50L75 25" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M50 50V80" stroke="#3B82F6" stroke-width="8" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="mini-icon light">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 25L50 50L75 25" stroke="#000" stroke-width="8" stroke-linecap="round"/><path d="M50 50V80" stroke="#2563EB" stroke-width="8" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="header-mockup">
+                            <svg viewBox="0 0 100 100" fill="none"><path d="M25 25L50 50L75 25" stroke="#fff" stroke-width="8" stroke-linecap="round"/><path d="M50 50V80" stroke="#3B82F6" stroke-width="8" stroke-linecap="round"/></svg>
+                            IVAN YERRY
+                        </div>
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copySvg(this)">Copiar SVG Inline</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toast">¡Código SVG copiado al portapapeles!</div>
+
+    <script>
+        function filterLogos(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.logo-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.cat === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function copySvg(button) {
+            const card = button.closest('.logo-card');
+            const svg = card.querySelector('.logo-display svg').outerHTML;
+            navigator.clipboard.writeText(svg).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2500);
+            });
+        }
+    </script>
+</body>
+</html>
