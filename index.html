@@ -103,22 +103,27 @@
         .status-pill {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.45rem;
             background: rgba(16, 185, 129, 0.08);
             border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 0.25rem 0.65rem;
+            padding: 0 0.65rem;
+            height: 24px;
             border-radius: 999px;
             font-size: 0.75rem;
             font-weight: 600;
+            line-height: 1;
             color: var(--status-available);
             letter-spacing: 0.02em;
         }
         .status-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             background-color: var(--status-available);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--status-available);
+            box-shadow: 0 0 6px var(--status-available);
+            flex-shrink: 0;
+            display: inline-block;
         }
 
         .lang-switch {
@@ -158,6 +163,9 @@
             color: var(--text-medium);
             font-size: 0.85rem;
             font-weight: 500;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
         }
         nav.nav-links a:hover {
             color: var(--text-high);
@@ -333,8 +341,13 @@
 
         .expertise-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.25rem;
+        }
+        @media (max-width: 860px) {
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
         }
         .expertise-card {
             background: var(--surface-1);
@@ -412,7 +425,7 @@
 
                 <nav class="nav-links">
                     <a href="#projects" data-i18n="navProjects">Proyectos</a>
-                    <a href="#stack" data-i18n="navEngineering">Ingeniería</a>
+                    <a href="#stack" data-i18n="navStack">Stack</a>
                     <a href="https://www.linkedin.com/in/yerry-hinojosa" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <a href="https://github.com/Reve7339" target="_blank" rel="noopener noreferrer">GitHub</a>
                 </nav>
@@ -450,7 +463,7 @@
                 <h3 class="project-name">Dex</h3>
                 
                 <p class="project-summary" data-i18n="dexSummary">
-                    Un asistente personal ejecutivo que convierte notas de voz, reuniones y compromisos desordenados en una agenda estructurada y tareas accionables. Diseñado con un cliente móvil local-first y un backend de coordinación en la nube, permitiendo consultar y organizar compromisos de forma privada y sin depender obligatoriamente de una conexión a internet.
+                    Un asistente personal ejecutivo que convierte notas de voz, reuniones y compromisos desordenados en una agenda estructurada y tareas accionables.
                 </p>
 
                 <div class="tech-grid">
@@ -458,24 +471,24 @@
                     <div class="tech-card">
                         <h4 data-i18n="tech1Title">Enrutador de Ejecución, Estado y Colas</h4>
                         <p data-i18n="tech1Desc">
-                            La concurrencia en el backend se regula mediante un worker pool controlado con semáforos basados en canales para absorber ráfagas de procesamiento asíncrono sin agotar descriptores ni bloquear el scheduler. Las mutaciones de agenda y tareas se resuelven en transacciones atómicas con rollback automático ante fallos. Incluye seguimiento proactivo de límites con algoritmos de tipo Token Bucket al 90% para evitar caídas en cascada por respuestas HTTP 429.
+                            Worker pool regulado con canales en Go para absorber ráfagas sin saturar el sistema. Mutaciones de agenda y tareas en transacciones PostgreSQL con rollback automático, y control de cuotas con Token Bucket al 90% para prevenir errores 429.
                         </p>
                     </div>
 
                     <div class="tech-card">
                         <h4 data-i18n="tech2Title">Búsqueda Híbrida en el Dispositivo (Mobile)</h4>
                         <p data-i18n="tech2Desc">
-                            Para mantener la privacidad y evitar el consumo excesivo de memoria en el teléfono, implementamos una búsqueda en dos fases. Primero, un filtrado léxico rápido mediante SQLite FTS5 (BM25) acota un subconjunto de candidatos relevantes sobre notas y tareas locales. Luego, se evalúa la cercanía semántica únicamente sobre este grupo preseleccionado para rankear los resultados finales, garantizando que los documentos privados nunca salgan del dispositivo.
+                            Búsqueda local en dos fases: filtrado léxico rápido con SQLite FTS5 (BM25) para preseleccionar notas y tareas, seguido de cálculo semántico sobre los candidatos para el orden final. Los datos se procesan en el dispositivo sin enviarse a servidores.
                         </p>
                     </div>
 
                     <div class="tech-card">
                         <h4 data-i18n="tech3Title">Adaptación de NLU en Rust (klerk-embed)</h4>
                         <p data-i18n="tech3Desc">
-                            Adaptación y compilación de un runtime ligero en Rust para ejecutar generación de embeddings y clasificación de intenciones de forma nativa sobre la arquitectura ARM64 de la VPS. Entrenado para discriminar entre acciones de calendario, tareas y notas mediante un dataset sintético estructurado.
+                            Runtime en Rust compilado para ARM64 en la VPS, encargado de generar embeddings y clasificar intenciones (calendario, tareas y notas). Entrenado con un dataset sintético.
                         </p>
                         <div class="tech-note" data-i18n="tech3Note">
-                            * Nota de rigor técnico: Al haber sido entrenado exclusivamente con datos sintéticos, presenta un margen de error ante fraseos y ambigüedades no contemplados en la distribución original de entrenamiento.
+                            * Al haberse entrenado con datos sintéticos, presenta margen de error ante expresiones fuera de la distribución original.
                         </div>
                     </div>
 
@@ -497,36 +510,29 @@
 
         <section id="stack">
             <div class="section-header">
-                <h2 class="section-title" data-i18n="stackTitle">Competencias de Ingeniería</h2>
-                <span class="section-sub" data-i18n="stackSub">CAPACIDADES TRANSFERIBLES A MÚLTIPLES ENTORNOS</span>
+                <h2 class="section-title" data-i18n="stackTitle">Stack</h2>
+                <span class="section-sub" data-i18n="stackSub">TECNOLOGÍAS Y ARQUITECTURA</span>
             </div>
 
             <div class="expertise-grid">
                 <div class="expertise-card">
                     <h3 data-i18n="exp1Title">Backend Systems & Concurrency</h3>
                     <p data-i18n="exp1Desc">
-                        Diseño de APIs REST limpias, pipelines concurrentes con sincronización segura mediante primitivas de Go, propagación estricta de contextos, modelado relacional y transaccional en PostgreSQL y optimización de pools de conexiones.
+                        APIs REST y pipelines concurrentes en Go, propagación de contexto, transacciones atómicas en PostgreSQL y optimización de pools de conexiones.
                     </p>
                 </div>
 
                 <div class="expertise-card">
                     <h3 data-i18n="exp2Title">Mobile Architecture & State</h3>
                     <p data-i18n="exp2Desc">
-                        Desarrollo multiplataforma con Flutter aplicando Clean Architecture, gestión de estado reactivo e inmutable con Riverpod, persistencia relacional local con SQLite y diseño de clientes resilientes a caídas de red.
+                        Aplicaciones en Flutter con Clean Architecture, estado inmutable con Riverpod, persistencia local en SQLite y sincronización tolerante a fallos de red.
                     </p>
                 </div>
 
                 <div class="expertise-card">
                     <h3 data-i18n="exp3Title">Applied AI & Retrieval Systems</h3>
                     <p data-i18n="exp3Desc">
-                        Implementación de flujos de búsqueda semántica híbrida, gestión de bases de datos vectoriales con pgvector e índices HNSW, clasificación de intenciones en el borde y extracción de datos estructurados con validación de esquemas.
-                    </p>
-                </div>
-
-                <div class="expertise-card">
-                    <h3 data-i18n="exp4Title">Infrastructure & Edge Operations</h3>
-                    <p data-i18n="exp4Desc">
-                        Configuración de proxies inversos de alto rendimiento con Caddy y TLS automático, conteneirización con Docker Compose en redes privadas aisladas, administración de servidores Linux y despliegues en Oracle Cloud.
+                        Búsqueda híbrida y bases vectoriales con pgvector (índices HNSW), clasificación de intenciones en el borde y extracción de datos estructurados.
                     </p>
                 </div>
             </div>
@@ -547,7 +553,7 @@
         const TRANSLATIONS = {
             es: {
                 navProjects: "Proyectos",
-                navEngineering: "Ingeniería",
+                navStack: "Stack",
                 heroKicker: "Software Engineer & Systems Architect",
                 heroTitle: "Diseñando sistemas distribuidos en Go, arquitecturas móviles resilientes y software con inteligencia artificial que opera de forma predecible en producción.",
                 heroDesc: "Enfoque centrado en la solidez de la infraestructura, aislamiento de datos, control de concurrencia y construcción de herramientas donde la ingeniería de software está al servicio de la utilidad real del usuario.",
@@ -556,32 +562,30 @@
                 showcaseSub: "CASE STUDY & ARQUITECTURA DE PRODUCCIÓN",
                 dexTag: "PERSONAL EXECUTIVE AGENT",
                 dexStatus: "v1.2.0 · Live Product",
-                dexSummary: "Un asistente personal ejecutivo que convierte notas de voz, reuniones y compromisos desordenados en una agenda estructurada y tareas accionables. Diseñado con un cliente móvil local-first y un backend de coordinación en la nube, permitiendo consultar y organizar compromisos de forma privada y sin depender obligatoriamente de una conexión a internet.",
+                dexSummary: "Un asistente personal ejecutivo que convierte notas de voz, reuniones y compromisos desordenados en una agenda estructurada y tareas accionables.",
                 tech1Title: "Enrutador de Ejecución, Estado y Colas",
-                tech1Desc: "La concurrencia en el backend se regula mediante un worker pool controlado con semáforos basados en canales para absorber ráfagas de procesamiento asíncrono sin agotar descriptores ni bloquear el scheduler. Las mutaciones de agenda y tareas se resuelven en transacciones atómicas con rollback automático ante fallos. Incluye seguimiento proactivo de límites con algoritmos de tipo Token Bucket al 90% para evitar caídas en cascada por respuestas HTTP 429.",
+                tech1Desc: "Worker pool regulado con canales en Go para absorber ráfagas sin saturar el sistema. Mutaciones de agenda y tareas en transacciones PostgreSQL con rollback automático, y control de cuotas con Token Bucket al 90% para prevenir errores 429.",
                 tech2Title: "Búsqueda Híbrida en el Dispositivo (Mobile)",
-                tech2Desc: "Para mantener la privacidad y evitar el consumo excesivo de memoria en el teléfono, implementamos una búsqueda en dos fases. Primero, un filtrado léxico rápido mediante SQLite FTS5 (BM25) acota un subconjunto de candidatos relevantes sobre notas y tareas locales. Luego, se evalúa la cercanía semántica únicamente sobre este grupo preseleccionado para rankear los resultados finales, garantizando que los documentos privados nunca salgan del dispositivo.",
+                tech2Desc: "Búsqueda local en dos fases: filtrado léxico rápido con SQLite FTS5 (BM25) para preseleccionar notas y tareas, seguido de cálculo semántico sobre los candidatos para el orden final. Los datos se procesan en el dispositivo sin enviarse a servidores.",
                 tech3Title: "Adaptación de NLU en Rust (klerk-embed)",
-                tech3Desc: "Adaptación y compilación de un runtime ligero en Rust para ejecutar generación de embeddings y clasificación de intenciones de forma nativa sobre la arquitectura ARM64 de la VPS. Entrenado para discriminar entre acciones de calendario, tareas y notas mediante un dataset sintético estructurado.",
-                tech3Note: "* Nota de rigor técnico: Al haber sido entrenado exclusivamente con datos sintéticos, presenta un margen de error ante fraseos y ambigüedades no contemplados en la distribución original de entrenamiento.",
+                tech3Desc: "Runtime en Rust compilado para ARM64 en la VPS, encargado de generar embeddings y clasificar intenciones (calendario, tareas y notas). Entrenado con un dataset sintético.",
+                tech3Note: "* Al haberse entrenado con datos sintéticos, presenta margen de error ante expresiones fuera de la distribución original.",
                 tech4Title: "Aislamiento Físico y Lógico de Datos",
-                tech4Desc: "En el cliente móvil, los datos se particionan físicamente en archivos SQLite independientes por usuario (dex_user_<id>.db), cerrando y purgando el estado en RAM en cada cierre de sesión. En el servidor central, cada consulta en PostgreSQL está condicionada lógicamente mediante user_id inyectado desde claims de JWT validados en el middleware, asegurando que los datos nunca se mezclen.",
+                tech4Desc: "En móvil, particionado físico en archivos SQLite independientes (dex_user_<id>.db) con purga de memoria al cerrar sesión. En backend, aislamiento lógico en PostgreSQL filtrando por user_id desde el JWT en cada consulta.",
                 btnVisitDex: "Visitar dex.yerry.me",
                 btnViewArch: "Ver Topología de Arquitectura",
-                stackTitle: "Competencias de Ingeniería",
-                stackSub: "CAPACIDADES TRANSFERIBLES A MÚLTIPLES ENTORNOS",
+                stackTitle: "Stack",
+                stackSub: "TECNOLOGÍAS Y ARQUITECTURA",
                 exp1Title: "Backend Systems & Concurrency",
-                exp1Desc: "Diseño de APIs REST limpias, pipelines concurrentes con sincronización segura mediante primitivas de Go, propagación estricta de contextos, modelado relacional y transaccional en PostgreSQL y optimización de pools de conexiones.",
+                exp1Desc: "APIs REST y pipelines concurrentes en Go, propagación de contexto, transacciones atómicas en PostgreSQL y optimización de pools de conexiones.",
                 exp2Title: "Mobile Architecture & State",
-                exp2Desc: "Desarrollo multiplataforma con Flutter aplicando Clean Architecture, gestión de estado reactivo e inmutable con Riverpod, persistencia relacional local con SQLite y diseño de clientes resilientes a caídas de red.",
+                exp2Desc: "Aplicaciones en Flutter con Clean Architecture, estado inmutable con Riverpod, persistencia local en SQLite y sincronización tolerante a fallos de red.",
                 exp3Title: "Applied AI & Retrieval Systems",
-                exp3Desc: "Implementación de flujos de búsqueda semántica híbrida, gestión de bases de datos vectoriales con pgvector e índices HNSW, clasificación de intenciones en el borde y extracción de datos estructurados con validación de esquemas.",
-                exp4Title: "Infrastructure & Edge Operations",
-                exp4Desc: "Configuración de proxies inversos de alto rendimiento con Caddy y TLS automático, conteneirización con Docker Compose en redes privadas aisladas, administración de servidores Linux y despliegues en Oracle Cloud."
+                exp3Desc: "Búsqueda híbrida y bases vectoriales con pgvector (índices HNSW), clasificación de intenciones en el borde y extracción de datos estructurados."
             },
             en: {
                 navProjects: "Projects",
-                navEngineering: "Engineering",
+                navStack: "Stack",
                 heroKicker: "Software Engineer & Systems Architect",
                 heroTitle: "Engineering resilient distributed backends, dependable mobile architectures, and practical AI systems that work predictably in production.",
                 heroDesc: "Focused on infrastructure reliability, data isolation, concurrency control, and building software systems where engineering serves genuine human utility.",
@@ -590,28 +594,26 @@
                 showcaseSub: "CASE STUDY & PRODUCTION ARCHITECTURE",
                 dexTag: "PERSONAL EXECUTIVE AGENT",
                 dexStatus: "v1.2.0 · Live Product",
-                dexSummary: "An executive personal assistant that turns unstructured voice notes, meetings, and commitments into a structured schedule and actionable tasks. Engineered with a local-first mobile client and a cloud coordination backend, enabling private schedule management without requiring constant internet connectivity.",
+                dexSummary: "An executive personal assistant that turns unstructured voice notes, meetings, and commitments into a structured schedule and actionable tasks.",
                 tech1Title: "Execution, State & Queue Router",
-                tech1Desc: "Backend concurrency is governed by a worker pool regulated by channel-based semaphores to absorb asynchronous processing spikes without exhausting descriptors or stalling the Go scheduler. Schedule mutations execute within atomic transactions with automatic rollback on errors. Features proactive limit tracking with Token Bucket algorithms at 90% capacity to prevent cascading failures from HTTP 429 responses.",
+                tech1Desc: "Worker pool regulated by channels in Go to absorb traffic spikes. Schedule and task mutations in atomic PostgreSQL transactions with automatic rollback, plus Token Bucket rate-limiting at 90% capacity to prevent 429 errors.",
                 tech2Title: "On-Device Hybrid RAG Engine (Mobile)",
-                tech2Desc: "To guarantee privacy and prevent memory bloat on mobile hardware, we implemented a two-phase search flow. Fast lexical filtering via SQLite FTS5 (BM25) first isolates a relevant candidate subset across local notes and tasks. Semantic proximity is then evaluated strictly on this preselected group to rank final results, ensuring private documents never leave the physical device.",
+                tech2Desc: "Two-phase local search: fast lexical filtering with SQLite FTS5 (BM25) to preselect notes and tasks, followed by semantic scoring on candidates for final ranking. Data is processed on-device without external servers.",
                 tech3Title: "NLU Adaptation in Rust (klerk-embed)",
-                tech3Desc: "Adapted and compiled a lightweight runtime in Rust to execute embedding generation and intent inference natively on the VPS's ARM64 architecture. Fine-tuned to discriminate between calendar, task, and note actions using a structured synthetic dataset.",
-                tech3Note: "* Technical rigor note: Because it was trained on synthetic data, it exhibits an observable margin of error when encountering ambiguous real-world phrasing outside its training distribution.",
+                tech3Desc: "Rust runtime compiled for ARM64 on the VPS, handling embedding generation and intent classification (calendar, tasks, notes). Trained on a synthetic dataset.",
+                tech3Note: "* Trained on synthetic data, with an expected margin of error on real-world phrasing outside the training distribution.",
                 tech4Title: "Physical & Logical Data Isolation",
-                tech4Desc: "On mobile devices, user data is physically partitioned into isolated SQLite files per user (dex_user_<id>.db), with complete RAM purge upon logout. In the core backend, every PostgreSQL query is logically scoped with a user_id injected directly from JWT claims validated in middleware, guaranteeing data never bleeds across boundaries.",
+                tech4Desc: "On mobile devices, physical partitioning in isolated SQLite files (dex_user_<id>.db) with RAM purge on logout. On backend, logical isolation in PostgreSQL filtering by user_id from the JWT on every query.",
                 btnVisitDex: "Visit dex.yerry.me",
                 btnViewArch: "View Architecture Topology",
-                stackTitle: "Engineering Competencies",
-                stackSub: "TRANSFERABLE SKILLS ACROSS DIVERSE ENVIRONMENTS",
+                stackTitle: "Stack",
+                stackSub: "TECHNOLOGIES & ARCHITECTURE",
                 exp1Title: "Backend Systems & Concurrency",
-                exp1Desc: "Clean REST API design, concurrent pipelines with thread-safe synchronization using Go primitives, strict context propagation, relational transactional modeling in PostgreSQL, and connection pool optimization.",
+                exp1Desc: "REST APIs and concurrent pipelines in Go, context propagation, atomic PostgreSQL transactions, and connection pool optimization.",
                 exp2Title: "Mobile Architecture & State",
-                exp2Desc: "Cross-platform engineering with Flutter and Clean Architecture, reactive immutable state management with Riverpod, local relational persistence with SQLite, and offline-resilient networking.",
+                exp2Desc: "Flutter apps with Clean Architecture, immutable state using Riverpod, local SQLite persistence, and offline-tolerant networking.",
                 exp3Title: "Applied AI & Retrieval Systems",
-                exp3Desc: "Hybrid semantic retrieval pipelines, vector database management with pgvector and HNSW indexing, edge intent classification, and structured data extraction with schema validation.",
-                exp4Title: "Infrastructure & Edge Operations",
-                exp4Desc: "High-performance reverse proxying with Caddy and automated TLS, containerization with Docker Compose on private bridge networks, Linux administration, and Oracle Cloud deployments."
+                exp3Desc: "Hybrid search and vector databases with pgvector (HNSW indices), edge intent classification, and structured data extraction."
             }
         };
 
