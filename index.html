@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivan Yerry Hinojosa | Software Engineer & AI Systems Architect</title>
+    <meta name="description" content="Design and engineering of high-concurrency Go distributed systems, deterministic autonomous AI agents, offline-first mobile architectures in Flutter, and vector databases.">
+    <link rel="canonical" href="https://yerry.me/">
+    <meta property="og:title" content="Ivan Yerry Hinojosa | Software Engineer & AI Systems Architect">
+    <meta property="og:description" content="Design and engineering of high-concurrency Go distributed systems, deterministic autonomous AI agents, offline-first mobile architectures in Flutter, and vector databases.">
+    <meta property="og:url" content="https://yerry.me/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- SVG inline Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <style>
+        /* CSS reset and base */
+        :root {
+            --bg-black: #000000;
+            --surface-1: #090A0F;
+            --surface-2: #111218;
+            --surface-3: #161722;
+            --border-color: #1E202E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --accent-blue: #3B82F6;
+            --accent-blue-hover: #2563EB;
+            --status-emerald: #10B981;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-secondary);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a { color: var(--accent-blue); text-decoration: none; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-blue-hover); }
+
+        h1, h2, h3, h4 { color: var(--text-primary); font-weight: 600; line-height: 1.2; margin-bottom: 1rem; }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .wordmark {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--surface-1);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--status-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--status-emerald);
+        }
+
+        nav { display: flex; gap: 1.5rem; }
+        nav a { color: var(--text-secondary); font-size: 0.95rem; }
+        nav a:hover { color: var(--text-primary); }
+
+        /* Hero */
+        .hero {
+            padding: 5rem 0;
+            max-width: 800px;
+        }
+
+        .hero h1 { font-size: 3.5rem; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.25rem; margin-bottom: 2.5rem; max-width: 700px; }
+
+        .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border: 1px solid var(--accent-blue);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-blue-hover);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: var(--surface-2);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover {
+            background-color: var(--surface-3);
+            border-color: #333;
+        }
+
+        /* Section */
+        section { padding: 4rem 0; border-top: 1px solid var(--border-color); }
+        .section-title { font-size: 2rem; margin-bottom: 2.5rem; }
+
+        /* Showcase Card */
+        .card {
+            background-color: var(--surface-1);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-title { font-size: 1.75rem; margin: 0; }
+        .badge {
+            background: var(--surface-2);
+            border: 1px solid var(--border-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .arch-item {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .arch-item h4 { color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .arch-item p { font-size: 0.95rem; margin: 0; }
+
+        /* Stack Grid */
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .stack-col h3 { font-size: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; }
+        .stack-col ul { list-style: none; }
+        .stack-col li { margin-bottom: 0.5rem; font-size: 0.95rem; display: flex; align-items: center; }
+        .stack-col li::before { content: "▹"; color: var(--accent-blue); margin-right: 0.5rem; }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .social-links a { color: var(--text-secondary); font-weight: 500; }
+        .social-links a:hover { color: var(--text-primary); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="wordmark">IVAN YERRY HINOJOSA</div>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Available for AI Systems Engineering · Remote / Global
+            </div>
+            <nav>
+                <a href="#projects">Projects</a>
+                <a href="#stack">Stack</a>
+                <a href="https://github.com/Reve7339" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Software Engineer & AI Systems Architect</h1>
+            <p>Architecting high-concurrency distributed backends in Go, autonomous AI agent pipelines, local-first offline architectures in Flutter, and vector search systems.</p>
+            <div class="btn-group">
+                <a href="https://dex.yerry.me" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Explorar Dex (Agente Autónomo)</a>
+                <a href="https://github.com/Reve7339" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Flagship Project</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Dex: Personal Executive Agent</h3>
+                    <span class="badge">v1.2.0 · Live Product & Mobile App</span>
+                </div>
+                
+                <p>An autonomous AI assistant leveraging a distributed backend and an offline-first mobile app.</p>
+                
+                <div class="architecture-grid">
+                    <div class="arch-item">
+                        <h4>Multi-LLM Fleet Orchestration</h4>
+                        <p>Concurrent fleet of 6 models (Groq Nemotron 120B, GPT-OSS 20B/120B, Qwen 27B, Gemini 3.5) with TPM/RPM quota control and automatic failover in Go.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>Rust Local NLU (klerk-embed)</h4>
+                        <p>Local microservice for embeddings and intent classification in &lt;50ms.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>On-Device Hybrid RAG</h4>
+                        <p>Lexical search (SQLite v2 FTS5 BM25) + in-memory vector Cosine Similarity on the device.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>Multi-Tenant Physical Isolation</h4>
+                        <p>Physical SQLite file isolation on client & PostgreSQL 16 with pgvector HNSW indices on the cloud.</p>
+                    </div>
+                    <div class="arch-item">
+                        <h4>Bidirectional Sync</h4>
+                        <p>Google Calendar OAuth2 integration with stealth offline resilience.</p>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <a href="https://dex.yerry.me" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Ver Landing de Dex</a>
+                    <a href="https://github.com/Reve7339/klerk-secretary/releases/download/v1.2.0/app-release.apk" class="btn btn-secondary">Descargar APK v1.2.0</a>
+                    <a href="https://github.com/Reve7339/klerk-secretary" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Repositorio GitHub</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="stack">
+            <h2 class="section-title">Technical Expertise</h2>
+            <div class="stack-grid">
+                <div class="stack-col">
+                    <h3>High-Concurrency Backend</h3>
+                    <ul>
+                        <li>Go 1.23</li>
+                        <li>Goroutines & Channels</li>
+                        <li>Context Propagation</li>
+                        <li>Zero Data Races (-race)</li>
+                        <li>REST APIs</li>
+                    </ul>
+                </div>
+                <div class="stack-col">
+                    <h3>Local-First Mobile</h3>
+                    <ul>
+                        <li>Flutter 3</li>
+                        <li>Riverpod State Machines</li>
+                        <li>SQLite v2 Relational</li>
+                        <li>Repository Pattern</li>
+                        <li>Clean Architecture</li>
+                    </ul>
+                </div>
+                <div class="stack-col">
+                    <h3>Applied AI & Vector Systems</h3>
+                    <ul>
+                        <li>PostgreSQL pgvector & HNSW</li>
+                        <li>Rust NLU</li>
+                        <li>Structured Guardrails</li>
+                        <li>Deterministic Function Calling</li>
+                    </ul>
+                </div>
+                <div class="stack-col">
+                    <h3>Edge & Cloud Infrastructure</h3>
+                    <ul>
+                        <li>Caddy 2 Reverse Proxy</li>
+                        <li>TLS 1.3 Let's Encrypt</li>
+                        <li>Docker Compose</li>
+                        <li>Linux Hardening</li>
+                        <li>Oracle Cloud ARM64</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://github.com/Reve7339" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://linkedin.com/in/ivanyerry" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="mailto:ivan@yerry.me">Email</a>
+            </div>
+            <p>&copy; 2026 Ivan Yerry Hinojosa. Engineered for performance.</p>
+        </footer>
+    </div>
+</body>
+</html>
